@@ -40,7 +40,7 @@ def waiting_with_xpath_click(browser, xpath):
 
 
 # zhengxiawu_list = [{'index': 68, 'title': 'Dense auto-encoder hashing for robust cross-modality retrieval'}]
-zhengxiawu_list = [{'index': 69, 'title': 'Pvnet: A joint convolutional network of point cloud and multi-view for 3d shape recognition'}]
+zhengxiawu_list = [{'index': 68, 'title': 'Dense auto-encoder hashing for robust cross-modality retrieval'}]
 browser = webdriver.Chrome(executable_path='/Users/sherwood/.local/chromedriver')
 dst_dir = '/Users/sherwood/Desktop/2020杰青+科学探索奖/引用查询/郑侠武部分文件夹'
 for paper in zhengxiawu_list:
@@ -87,11 +87,14 @@ for paper in zhengxiawu_list:
                 "href": reference_paper_href,
                 "apa": reference_paper_apa_text
             })
-        button = browser.find_element_by_xpath('//*[@id="gs_nm"]/button[2]')
-        button_onclick = button.get_attribute('onclick')
-        if len(button_onclick) > 0:
-            button.click()
-        else:
+        try:
+            button = browser.find_element_by_xpath('//*[@id="gs_nm"]/button[2]')
+            button_onclick = button.get_attribute('onclick')
+            if len(button_onclick) > 0:
+                button.click()
+            else:
+                flag = False
+        except EC.NoSuchElementException:
             flag = False
         # try:
         #
@@ -100,5 +103,5 @@ for paper in zhengxiawu_list:
         #     flag = True
         # except WebDriverException:
         #     flag = False
-    json.dump(this_paper_information, os.path.join(this_paper_dir_name, 'info.json'))
+    json.dump(this_paper_information, open(os.path.join(this_paper_dir_name, 'info.json'), 'w+'))
     pprint.pprint(this_paper_information)
