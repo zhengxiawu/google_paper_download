@@ -8,6 +8,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from scihub.scihub import SciHub
 import requests
+import tqdm
 
 
 def waiting_with_xpath_click(browser, xpath):
@@ -40,10 +41,12 @@ def down_pdf(url, dst):
             print("download " + url)
             r = requests.get(url, stream=True, headers=header, proxies=proxies)
             with open(dst, 'wb') as fd:
-                for chunk in r.iter_content(2000):
+                for chunk in tqdm.tqdm(r.iter_content(20000)):
                     fd.write(chunk)
             return True
         except requests.exceptions.SSLError:
+            return False
+        except requests.exceptions.ConnectionError:
             return False
 
 
